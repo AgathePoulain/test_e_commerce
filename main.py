@@ -1,4 +1,4 @@
-#  -------- CREER UN SITE E COMMERCE --------
+#  -------- CREER UN SITE E COMMERCE -----------
 
 # ----- 1 : ENVIRONNEMENT DE TRAVAIL -----
 # pip install django
