@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+    <title>La boutique de la Grange Ariégeoise</title>
+</head>
+<body>
+
+<a href="{% url 'index' %}">
+    <h1>Un garage d'exception</h1>
+</a>
+
+
+{% if user.is_authenticated %}
+    Bienvenue {{ user.username }}
+    <p><a href="{% url 'logout' %}">Déconnexion</a></p>
+
+{% else %}
+<a href="{% url 'login' %}">Connexion</a>
+<a href="{% url 'signup' %}">Inscription</a>
+{% endif %}
+
+{% if user.cart %}
+<a href="{% url 'cart' %}">Voir le panier ({{ user.cart.orders.count }})</a>
+{% endif %}
+
+
+{% block content %}
+{% endblock %}
+</body>
+</html>
