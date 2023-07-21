@@ -2,12 +2,22 @@
 
 {% block content %}
 
-{% for product in products %}
-    <a href="{{ product.get_absolute_url }}"><h2>{{product.name}}</h2></a>
-    <img src="{{product.thumbnail.url}}" alt="{{product.name}}" style = "max-width: 300px;">
+<div class="container text-center">
+  <article class="row">
+          {% for product in products %}
+      <article class="col-md-4 mb-4 mt-4">
+          <p></p>
+          <img src="{{product.thumbnail.url}}" alt="{{product.name}}" style = "max-width: 300px;">
+          <p></p>
+          <selection class="texte3">{{product.name}}</selection><p></p>
+          <p><a class="btn btn-custom" href="{{ product.get_absolute_url }}" role="button">Voir l'article</a>
+          </p>
+      </article>
+      {% endfor %}
+  </div>
+</div>
 
 
-{% endfor %}
 
 {% endblock %}
 

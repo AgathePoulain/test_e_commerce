@@ -40,7 +40,7 @@ ARTICLE :
 - commandé ou non --> booléen
 
 """
-class Order(models.Model):
+class Item(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE) # Si user supprime son compte, on supprime en cascade tous les articles qu'il a pu réunir
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
@@ -61,7 +61,7 @@ PANIER :
 
 class Cart(models.Model):
     user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE) # un seul panier par user
-    orders = models.ManyToManyField(Order)
+    orders = models.ManyToManyField(Item)
 
     def __str__(self):
         return self.user.username

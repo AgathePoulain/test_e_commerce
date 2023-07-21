@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from store.models import Product, Cart, Order
+from store.models import Product, Cart, Item
 
 
 def index(request):
@@ -22,7 +22,7 @@ def add_to_cart(request, slug):
     # _ : pour dire qu'on n'utilise pas la seconde variable
 
     # Récupérer l'ordre
-    order, created = Order.objects.get_or_create(user=user, ordered=False, product=product)
+    order, created = Item.objects.get_or_create(user=user, ordered=False, product=product)
     if created: # objet n'existait pas encore dans le panier
         cart.orders.add(order)
         cart.save()
