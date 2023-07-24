@@ -1,82 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Panier</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <style>
-         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Lato&family=Lugrasimo&display=swap');
-
-         body {
-             background-color : whitesmoke;
-         }
-
-        .texte1 {
-             color:darkslategray;
-             font-size: 60px;
-             text-align: center;
-             font-family: 'Dancing Script', cursive;
-             margin-top: 70px;
-             margin-bottom: 10px;
-        }
-
-        .texte2 {
-             font-size: 20px;
-             text-align: center;
-             font-family: 'Dancing Script', cursive;
-             color: darkslategray;
-            margin-top: 30px;
-        }
-
-         .texte3 {
-             font-size: 40px;
-             font-family: 'Dancing Script', cursive;
-             color: darkslategray;
-        }
-
-         .texte4 {
-             font-size: 15px;
-             font-family: 'Lato', sans-serif;
-             color: darkslategray;
-        }
-
-        .btn-custom{
-            font-size: 15px;
-            font-family: 'Lato', sans-serif;
-            background-color : darkslategray;
-            color: whitesmoke;
-            margin-top: 10px;
-        }
-
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <a class="btn btn-custom" href="{% url 'index' %}" role="button">Acceuil</a>
-            </div>
-
-                 <div class="col-auto ml-auto">
-                     {% if user.is_authenticated %}
-                     <selection class="texte2" style="margin-right: 10px">Bienvenue {{ user.username }}</selection>
-                        <a class="btn btn-custom" href="{% url 'logout' %}" role="button">Déconnexion</a>
-
-                     {% else %}
-                        <a class="btn btn-custom" href="{% url 'login' %}" role="button">Connexion</a>
-                        <a class="btn btn-custom" href="{% url 'signup' %}" role="button">Inscription</a>
-                     {% endif %}
-                 </div>
-
-        </div>
-    </div>
-
+{% extends 'base.html' %}
+{% block content %}
 
 <div class="container">
     <div class="row">
-            <h2 class="texte1">Panier</h2>
+            <h2 class="texte4">Panier</h2>
     </div>
 
     {% for order in orders %}
@@ -86,8 +13,8 @@
         </div>
 
         <div class="col-6">
-            <h2 class="texte3" style = "margin-top: 40px">{{order.product.name}}</h2>
-            <p class="texte4">Quantité commandée : {{ order.quantity }}</p>
+            <h2 class="texte7" style = "margin-top: 40px">{{order.product.name}}</h2>
+            <p class="texte8">Quantité commandée : {{ order.quantity }}</p>
         </div>
     </div>
     {% endfor %}
@@ -97,16 +24,5 @@
             <a class="btn btn-custom" href="{% url 'delete-cart' %}" role="button" style="margin-top: 30px; margin-bottom: 50px">Vider le panier</a>
         </div>
     </div>
-
-
-
 </div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
-    </script>
-</body>
-</html>
-
-
-
+{% endblock %}

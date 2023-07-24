@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
-
 {% block content %}
+
+    <div class="container">
+             <p class="texte2">Un garage d'exception</p>
+    </div>
+
+    <div class="container">
+        <div class="bandeau">
+            <p></p>
+            <p class="bandeau-texte">Livraison gratuite dans toute la France métropolitaine jusqu'au 30 septembre 2023 !!</p>
+            <p></p>
+        </div>
+    </div>
 
 <div class="container text-center">
   <article class="row">
@@ -9,15 +20,11 @@
           <p></p>
           <img src="{{product.thumbnail.url}}" alt="{{product.name}}" style = "max-width: 300px;">
           <p></p>
-          <selection class="texte3">{{product.name}}</selection><p></p>
+          <selection class="texte3">{{product.name}}</selection>
           <p><a class="btn btn-custom" href="{{ product.get_absolute_url }}" role="button">Voir l'article</a>
           </p>
       </article>
       {% endfor %}
-  </div>
+  </article>
 </div>
-
-
-
 {% endblock %}
-
