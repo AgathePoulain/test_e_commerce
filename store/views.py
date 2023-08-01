@@ -1,42 +1,94 @@
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-
-from store.models import Product, Cart, Item
+from django.utils.formats import number_format
+from store.models import Product, Cart, Item, Order
+from django.contrib import messages
+from django.http import HttpResponse
 
 
 def index(request):
     products = Product.objects.all()
-    return render(request, 'store/index.html', context={"products":products})
+    return render(request, 'store/index2.html', context={"products": products})
 
-def product_detail(request, slug):
-    product = get_object_or_404(Product, slug=slug) # Retourne le modèle s'il existe dans la bdd sinon renvoie erreur
-    return render(request, 'store/detail.html', context={"product":product})
 
-def add_to_cart(request, slug):
-    user = request.user # Récupérer user
-    product = get_object_or_404(Product, slug=slug) # Récupérer produit s'il existe
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)  # Retourne le modèle s'il existe dans la bdd sinon renvoie erreur
+    return render(request, 'store/detail.html', context={"product": product})
+
+
+def add_to_cart(request, pk):  # Ajouter un article au panier
+    user = request.user  # Récupérer user
+    product = get_object_or_404(Product, pk=pk)  # Récupérer produit s'il existe
 
     # Récupérer le panier s'il existe et le créer s'il n'existe pas
-    cart, _ = Cart.objects.get_or_create(user=user)
-    # _ : pour dire qu'on n'utilise pas la seconde variable
+    panier, _ = Cart.objects.get_or_create(user=user)
+    # _ : Pour dire qu'on n'utilise pas la seconde variable
 
-    # Récupérer l'ordre
-    order, created = Item.objects.get_or_create(user=user, ordered=False, product=product)
-    if created: # objet n'existait pas encore dans le panier
-        cart.orders.add(order)
-        cart.save()
-    else : # objet existait déjà dans le panier, on incrémente sa quantité
-        order.quantity += 1
-        order.save()
-    return redirect(reverse("product", kwargs={"slug":slug}))
+    if product.stock > 0:  # Vérifier qu'il y a bien des produits en stock
+        item, created = Item.objects.get_or_create(user=user, product=product, defaults={"quantity": 0})
+        item.quantity += 1
+        item.save()
+        panier.items.add(item)
+        panier.save()
 
-def cart(request):
-    cart = get_object_or_404(Cart, user=request.user)
-    return render(request, 'store/cart.html', context={"orders":cart.orders.all()})
+        messages.success(request, f"L'article {product.name} a été ajouté au panier.")
+        product.stock -= 1
+        product.save()
+    else:
+        messages.warning(request, f"L'article {product.name} est actuellement indisponible.")
+    return redirect(reverse("product", kwargs={"pk": pk}))
 
-def delete_cart(request):
-    if cart:= request.user.cart: # SYNTHAXE !!
-        cart.orders.all().delete()
-        cart.delete()
+
+def plus_quantity(request, pk):
+    user = request.user  # Récupérer user
+    item = get_object_or_404(Item, user=user, pk=pk)
+    item.plus_quantity()
+    return redirect('cart')
+
+
+def minus_quantity(request, pk):
+    user = request.user  # Récupérer user
+    item = get_object_or_404(Item, user=user, pk=pk)
+    item.minus_quantity()
+    return redirect('cart')
+
+
+def cart(request):  # Afficher le panier
+    user = request.user
+    panier = get_object_or_404(Cart, user=user)
+    total_amount = 0.0
+
+    for item in panier.items.all():
+        price = item.get_price()
+        total_amount += price
+
+    formatted_total_amount = formatter(total_amount)
+    return render(request, 'store/cart.html',
+                  context={"items": panier.items.all(), "total_amount": formatted_total_amount})
+
+
+def formatter(amount):
+    formatted_amount = number_format(amount, decimal_pos=1, use_l10n=True)
+    parts = formatted_amount.split(",")
+    if len(parts[0]) >= 4:
+        parts[0] = " ".join([parts[0][:-3], parts[0][-3:]])
+    return f"{','.join(parts)}"
+
+
+def delete_item(request, pk):
+    user = request.user
+    item = get_object_or_404(Item, user=user, pk=pk)
+    product = item.product
+    product.stock += item.quantity  # Ajouter la quantité du produit supprimé au stock dans le magasin
+    product.save()
+    item.delete()
+    return redirect('cart')
+
+
+def validate_cart(request):
+    panier = get_object_or_404(Cart, user=request.user)
+    cart_validate, _ = Order.objects.get_or_create(user=request.user)
+    for item in panier.items.all():
+        cart_validate.orders.add(item)
+    panier.items.clear()  # Supprimer les articles du panier après la validation
     return redirect('index')

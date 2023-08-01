@@ -1,8 +1,8 @@
 @charset "UTF-8";
 /*!
-* Start Bootstrap - Shop Homepage v5.0.6 (https://startbootstrap.com/template/shop-homepage)
+* Start Bootstrap - Shop Item v5.0.6 (https://startbootstrap.com/template/shop-item)
 * Copyright 2013-2023 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-shop-homepage/blob/master/LICENSE)
+* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-shop-item/blob/master/LICENSE)
 */
 /*!
  * Bootstrap  v5.2.3 (https://getbootstrap.com/)
@@ -91,7 +91,6 @@
   }
 }
 
-/*noinspection CssUnresolvedCustomProperty*/
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);
@@ -5199,7 +5198,6 @@ textarea.form-control-lg {
   display: none;
 }
 
-/*noinspection ALL*/
 .toast-container {
   --bs-toast-zindex: 1090;
   position: absolute;
@@ -6636,8 +6634,6 @@ textarea.form-control-lg {
     opacity: 0.2;
   }
 }
-
-/*noinspection ALL*/
 .placeholder-wave {
   -webkit-mask-image: linear-gradient(130deg, #000 55%, rgba(0, 0, 0, 0.8) 75%, #000 95%);
           mask-image: linear-gradient(130deg, #000 55%, rgba(0, 0, 0, 0.8) 75%, #000 95%);
@@ -10827,43 +10823,4 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important;
   }
-}
-
-@media (min-width: 1025px) {
-.h-custom {
-height: 100vh !important;
-}
-}
-
-.card-registration .select-input.form-control[readonly]:not([disabled]) {
-font-size: 1rem;
-line-height: 2.15;
-padding-left: .75em;
-padding-right: .75em;
-}
-
-.card-registration .select-arrow {
-top: 13px;
-}
-
-.custom-icon{
-  color:darkslategray;
-}
-
-.bg-grey {
-background-color: #eae8e8;
-}
-
-@media (min-width: 992px) {
-.card-registration-2 .bg-grey {
-border-top-right-radius: 16px;
-border-bottom-right-radius: 16px;
-}
-}
-
-@media (max-width: 991px) {
-.card-registration-2 .bg-grey {
-border-bottom-left-radius: 16px;
-border-bottom-right-radius: 16px;
-}
 }

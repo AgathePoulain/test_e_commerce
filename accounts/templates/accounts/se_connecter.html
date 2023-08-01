@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Sing In</title>
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <link href="{% static 'css/style_index.css' %}" rel="stylesheet" />
+        <style>
+            .texte1{
+                color:darkslategray;
+                font-size: 30px;
+                text-align: center;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+<body>
+        <div class="row justify-content-center" style="margin-top: 180px">
+            <div class="col-auto">
+                 <a class="btn texte1" href="{% url 'index' %}" role="button">Un garage d'exception</a>
+            </div>
+        </div>
+        <div class="row justify-content-center" style="margin-top: 10px">
+            <div class="col-auto">
+                <selection class="nav-item">Connectez-vous avec votre nom d'utilisateur pour continuer</selection>
+            </div>
+        </div>
+
+        <div class="row justify-content-center" style="margin-top: 25px; margin-bottom: 240px">
+            <div class="col-auto">
+                <a class="btn btn-outline-dark" href="{% url 'login' %}" role="button">
+                    <i class="bi bi-person-fill me-1"></i>
+                    Connexion
+                </a>
+
+                <a class="btn btn-outline-dark" href="{% url 'signup' %}" role="button"  style="margin-left: 15px">
+                    <i class="bi bi-person-fill me-1"></i>
+                    Inscription
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Un garage d'exception 2023</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

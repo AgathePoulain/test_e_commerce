@@ -33,3 +33,5 @@ def logout_user(request):
     logout(request)
     return redirect('index')
 
+def signin (request):
+    return render(request, 'accounts/se_connecter.html')

@@ -13,3 +13,8 @@
 # ---> On peut écrire le style css directement dans le fichier html en insérant la balise <style></style> dans le <head>
 # ---> On peut également préciser un style particulier en déclarant un élément en html
 # Exemple : <h2 class="texte3" style = "margin-top: 40px">{{order.product.name}}</h2>
+
+# ------ 3 : UTILISER UN TEMPLATE DE BOOSTRAP ------
+# 1 : Importer le code css et le code html
+# 2 : html --> faire la bonne référene au fichier css avec {% load static %}
+# 3 : html --> ajouter le link dans le head et le script dans le body

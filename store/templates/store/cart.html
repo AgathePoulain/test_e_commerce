@@ -1,28 +1,148 @@
-{% extends 'base.html' %}
-{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Panier</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+        <link href="{% static 'css/style_index.css' %}" rel="stylesheet" />
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="{% url 'index' %}">Un garage d'exception</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link" href="#!">A propos</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Boutique</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">Tous les produits</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Les voitures</a></li>
+                                <li><a class="dropdown-item" href="#!">Les accessoires</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="col-auto ml-auto">
+                        {% if user.is_authenticated %}
+                             <span class="nav-item" style="margin-right: 15px">Bienvenue {{ user.username }}</span>
+                             <a class="btn btn-outline-dark" href="{% url 'logout' %}" role="button" style="margin-left: 15px">
+                                <i class="bi bi-person-fill me-1"></i>
+                                 Se déconnecter
+                             </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
 
-<div class="container">
-    <div class="row">
-            <h2 class="texte4">Panier</h2>
-    </div>
+        <section style="background-color: darkslategrey;">
+                  <div class="container py-5 h-100">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                      <div class="col-12">
+                        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                          <div class="card-body p-0">
+                            <div class="row g-0">
+                              <div class="col-lg-8">
+                                <div class="p-5">
+                                  <div class="d-flex justify-content-between align-items-center mb-5">
+                                    <h1 class="fw-bold mb-0 text-black">Panier</h1>
+                                    <h6 class="mb-0 text-muted">{{ user.cart.items.count }} articles</h6>
+                                  </div>
 
-    {% for order in orders %}
-    <div class="row">
-        <div class="col-auto ml-auto">
-            <img src="{{order.product.thumbnail.url}}" alt="{{order.product.name}}" style = "max-width: 400px; margin-top: 50px">
-        </div>
+                                  {% for item in items %}
+                                      <hr class="my-4">
+                                      <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                        <div class="col-md-2 col-lg-2 col-xl-2">
+                                          <img class="img-fluid rounded-3" src="{{item.product.thumbnail.url}}" alt="{{item.product.name}}" style = "max-width: 150px;">
+                                        </div>
+                                        <div class="col-md-3 col-lg-3 col-xl-3" style="margin-left: 30px">
+                                          <h6 class="text-muted">Voiture</h6>
+                                          <h5 class="text-black mb-0">{{item.product.name}}</h5>
+                                        </div>
 
-        <div class="col-6">
-            <h2 class="texte7" style = "margin-top: 40px">{{order.product.name}}</h2>
-            <p class="texte8">Quantité commandée : {{ order.quantity }}</p>
-        </div>
-    </div>
-    {% endfor %}
+                                        <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                                <button class="btn btn-link px-2"
+                                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                                    <a href="{% url 'minus_quantity' item.pk %}">
+                                                        <i class="fas fa-minus" style="color:darkslategrey"></i>
+                                                    </a>
+                                                </button>
 
-    <div class="row justify-content-center">
-        <div class="col">
-            <a class="btn btn-custom" href="{% url 'delete-cart' %}" role="button" style="margin-top: 30px; margin-bottom: 50px">Vider le panier</a>
-        </div>
-    </div>
-</div>
-{% endblock %}
+                                                <input id="form1" min="0" name="quantity" value="{{item.quantity}}" type="number" class="form-control form-control-sm" />
+
+
+                                                <button class="btn btn-link px-2"
+                                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                                    <a href="{% url 'plus_quantity' item.pk %}">
+                                                        <i class="fas fa-plus" style="color:darkslategrey"></i>
+                                                    </a>
+                                                </button>
+                                        </div>
+
+                                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                          <h6 class="mb-0">{{ item.get_price }} €</h6>
+                                        </div>
+
+                                        <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                            <a href="{% url 'delete_item' item.pk %}" class="text-muted"  id="liveAlertBtn"><i class="fas fa-times" style="color:darkslategrey"></i></a>
+                                        </div>
+                                        <p><div id="liveAlertPlaceholder"></div></p>
+
+                                      </div>
+                                  {% endfor %}
+
+                                  <hr class="my-4">
+                                  <div class="pt-5">
+                                    <h6 class="mb-0"><a href="{% url 'index' %}" class="text-body"><i
+                                          class="fas fa-long-arrow-alt-left me-2"></i>Continuer les achats</a></h6>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-lg-4 bg-grey">
+                                <div class="p-5">
+                                  <h3 class="fw-bold mb-5 mt-2 pt-1">Récapitulatif</h3>
+                                  <hr class="my-4">
+
+                                  <div class="d-flex justify-content-between mb-4">
+                                    <h5 class="text-uppercase">{{ user.cart.items.count }} articles</h5>
+                                  </div>
+
+                                  <h5 class="text-uppercase mb-3">Code Promo</h5>
+
+                                  <div class="mb-5">
+                                    <div class="form-outline">
+                                      <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
+                                      <label class="form-label" for="form3Examplea2">Saisir votre code promo</label>
+                                    </div>
+                                  </div>
+
+                                  <hr class="my-4">
+
+                                  <div class="d-flex justify-content-between mb-5">
+                                    <h5 class="text-uppercase">Total</h5>
+                                    <h5>{{ total_amount }} €</h5>
+                                  </div>
+                                  <div class="d-flex justify-content-center">
+                                    <a class="btn btn-dark" href="{% url 'validate_cart' %}" role="button" id="liveAlertBtn2">
+                                        Valider la commande
+                                    </a>
+                                  </div>
+                                    <p><div id="liveAlertPlaceholder2"></div></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
