@@ -1,6 +1,6 @@
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from store.views import index, product_detail, add_to_cart, cart, delete_item, plus_quantity, minus_quantity, validate_cart
 from accounts.views import signup, logout_user, login_user, signin
 
@@ -20,4 +20,6 @@ urlpatterns = [
     path('product/<int:pk>/add-to-cart/', add_to_cart, name='add-to-cart'),
     path('cart/plus_quantity/<int:pk>/', plus_quantity, name='plus_quantity'),
     path('cart/minus_quantity/<int:pk>/', minus_quantity, name='minus_quantity'),
+    path('', include('api.urls'))
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
