@@ -117,8 +117,4 @@ def validate_cart(request):
         for item in panier.items.all():
             item.delete()
 
-        messages.success(request, "Votre commande a été validée avec succès.")
-    else:
-        messages.warning(request, "Votre panier est vide.")
-
     return redirect('index')
