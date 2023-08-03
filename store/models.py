@@ -104,7 +104,7 @@ class Cart(models.Model):  # Modèle qui regroupe les commandes en cours
 
 
 class Order(models.Model):  # Modèle qui regroupe les commandes validées
-    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE)  # un seul panier par user
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     orders = models.ManyToManyField(Item)
     ordered = models.BooleanField(default=True)
     ordered_date = models.DateTimeField(blank=True, null=True)

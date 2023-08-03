@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils.formats import number_format
 from store.models import Product, Cart, Item, Order
 from django.contrib import messages
+from django.utils import timezone
 from django.http import HttpResponse
 
 
@@ -86,9 +87,38 @@ def delete_item(request, pk):
 
 
 def validate_cart(request):
-    panier = get_object_or_404(Cart, user=request.user)
-    cart_validate, _ = Order.objects.get_or_create(user=request.user)
-    for item in panier.items.all():
-        cart_validate.orders.add(item)
-    panier.items.clear()  # Supprimer les articles du panier après la validation
+    """
+    Principe de fonctionnement de la vue validate_cart :
+    1 : Récupérer le panier de l'utilisateur actuel.
+    2 : Créer un nouvel objet Order avec l'utilisateur actuel.
+    3 : Ajouter tous les articles du panier à l'objet Order.
+    4 : Marquer chaque article du panier comme étant commandé (ordered=True).
+    5 : Définir la date de commande pour chaque article.
+    6 : Vider le panier après la validation de la commande.
+
+    """
+    # 1
+    user = request.user
+    panier = get_object_or_404(Cart, user=user)
+
+    if panier.items.exists():
+        # 2
+        order = Order.objects.create(user=user, ordered=True, ordered_date=timezone.now())
+
+        # 3
+        for item in panier.items.all():
+            order.orders.add(item)
+
+        # 4 + 5
+        order.orders.update(ordered=True, ordered_date=timezone.now())
+
+        # 6
+        # panier.items.clear()
+        for item in panier.items.all():
+            item.delete()
+
+        messages.success(request, "Votre commande a été validée avec succès.")
+    else:
+        messages.warning(request, "Votre panier est vide.")
+
     return redirect('index')
