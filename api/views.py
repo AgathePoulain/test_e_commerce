@@ -1,4 +1,4 @@
-from rest_framework.decorators import api_view
+"""from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api.models import Post
 from api.serializers import PostSerializer
@@ -56,6 +56,7 @@ def update_post(request):
     get_new_price = request.data.get('new_price')
     get_new_stock = request.data.get('new_stock')
     get_new_description = request.data.get('new_description')
+    get_new_thumbnail = request.data.get('new_thumbnail')
     try:
         post = Post.objects.get(id=post_id)
         if get_new_name:
@@ -66,7 +67,10 @@ def update_post(request):
             post.stock = get_new_stock
         if get_new_description:
             post.description = get_new_description
+        if get_new_description:
+            post.thumbnail = get_new_thumbnail
         post.save()
         return Response({"Success": "The post was successfully updated"}, status=200)
     except Post.DoesNotExist:
         return Response({"Error": "The post does not exist"}, status=404)
+"""
