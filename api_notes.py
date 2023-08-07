@@ -194,6 +194,43 @@ def update_post(request):
         return Response({"Error": "The post does not exist"}, status=404)
 
 
+16 - VIEWSET ET ROUTEURS --
+Video : https://www.youtube.com/watch?v=AbonUu2QbLA&list=PLJuTqSmOxhNuN1iyCCx3pvkImo7JZpHHc&index=23
+
+Viewset : un ensemble de vue qui fait toutes les autres vues en une
+
+--> Créer viewset.py dans store
+from store.models import Product
+from store.serializers import ProductSerializer
+from rest_framework import viewsets
+
+
+class ProductViewset(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+
+-->  Créer routeurs.py dans shop
+from rest_framework.routers import DefaultRouter
+from store.viewset import ProductViewset
+
+router = DefaultRouter()
+router.register('viewset', ProductViewset, basename='product-a')
+
+'viewset' : C'est le préfixe URL qui sera utilisé pour les URL générées.
+Par exemple, les URL pour récupérer une liste de produits, créer un produit, mettre à jour un produit, etc., auront ce préfixe suivi
+par des segments spécifiques pour chaque opération.
+
+ProductViewset: C'est la classe de vue qui gérera les opérations sur les produits. Elle doit être une sous-classe de viewsets.ModelViewSet
+de Django REST framework. Cette classe ViewSet détermine comment les opérations CRUD sont gérées et quel sérialiseur est utilisé pour la conversion
+entre les objets Python et les données JSON.
+
+basename='product-a': Cela définit le nom de base pour la vue. Il est utilisé pour identifier cette vue dans les URL générées.
+Par exemple, lors de la génération d'une URL pour la récupération d'un produit spécifique, le nom de base est combiné avec l'identifiant
+du produit pour former une URL comme /viewset/1/.
+
+
+urlpatterns = router.urls
 
 
 

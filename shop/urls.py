@@ -1,6 +1,6 @@
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from store.views import index, product_detail, add_to_cart, cart, delete_item, plus_quantity, minus_quantity, \
     validate_cart, get_all_post, create_post, delete, get_post, update_post, index_api
 from accounts.views import signup, logout_user, login_user, signin
@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/delete/', delete),
     path('api/get_post/', get_post),
     path('api/update_post/', update_post),
+    path('api/v2/', include('shop.routers'))
 
 
 
